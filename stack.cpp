@@ -1,95 +1,102 @@
-#include "stack.h"
 #include <iostream>
+
 using namespace std;
 
-int main()
-{
-	Stack myStack;
+struct Node{
+    int data;
+    Node* next;
+}*head,*ptr;
 
-	char flag = 'y';
-	while(flag == 'y')
-	{
-		system("clear");
+Node* push(int item){
+    Node *node = new Node();
+    node->data = item;
+    node->next = NULL;
+    if(head == NULL){
+        head = node;
+    }
+    else{
+        ptr = head;
+        while(ptr->next != NULL){
+            ptr = ptr->next;
+        }
+        ptr->next = node;
+    }
+    return head;
+}
 
-		int choice = 0;
+int pop(){
+    ptr = head;
+    int temp;
+    if(ptr->next!= NULL){
+        while(ptr->next->next != NULL){
+            ptr = ptr->next;
+        }
+        temp = ptr->next->data;
+        ptr->next = NULL;
+    }
+    else{
+        temp = head->data;
+        head = NULL;
+    }
+    return temp;
+}
 
-		cout << "Choose one of the options given below : " << endl;
-		cout << "1. Insert an element into the stack" << endl;
-		cout << "2. Pop an element from the stack" << endl;
-		cout << "3. Read the element present at the top of the stack" << endl;
-		cout << "4. Calculate the number of elements present in the stack" << endl;
-		cout << "5. Check if the given stack is empty or not " << endl;
+int length(){
+    int count = 0;
+    ptr = head;
+    while(ptr != NULL){
+        ptr = ptr->next;
+        count++; 
+    }
+    return count;
+}
 
-		cout << "Enter your choice below (1 / 2 / 3 / 4 / 5) : " << endl;
-		cin >> choice;
+void display(){
+    if(head != NULL){
+        ptr = head;
+        while(ptr != NULL){
+            cout<< ptr->data<< " -> ";
+            ptr = ptr->next;
+        }
+    }
+    else{
+        cout<< "No elements in the stack";
+    }
+}
 
-		switch(choice)
-		{
-			case 1:
-			{
-				int item1 = 0;
-				cout << "Enter the data you would like to add into the stack : " << endl;
-				cin >> item1;
-				myStack.pushItem(item1);
-				cout << "Data added into the stack successfully" << endl;
-				break;
-			}
-			case 2:
-			{
-				int item2 = 0;
-				item2 = myStack.popItem();
-				if(item2 == -1)
-				{
-					cout << "ERROR : THE STACK IS EMPTY. REQUESTED OPERATION CANNOT BE PERFORMED" << endl;
-				}
-				else
-				{
-					cout << "The top element was successfully popped out from the stack" << endl;
-					cout << "The popped out element is " << item2 << endl;
-				}
-				break;
-			}
-			case 3:
-			{
-				int item3 = 0;
-				item3 = myStack.topItem();
-				if(item3 == -1)
-				{
-					cout << "ERROR : THE STACK IS EMPTY. REQUESTED OPERATION CANNOT BE PERFORMED" << endl;
-				}
-				else
-				{
-					cout << "The element present at the top of the stack is " << item3 << endl;
-				}
-				break;
-			}
-			case 4:
-			{
-				int num = 0;
-				num = myStack.lengthOfStack();
-				cout << "The number of elements present in the stack is " << num << endl;
-				break;
-			}
-			case 5:
-			{
-				if(myStack.isEmpty())
-				{
-					cout << "The given stack is empty" << endl;
-				}
-				else
-				{
-					cout << "The given stack is not empty" << endl;
-				}
-				break;
-			}
-			default:
-				cout << "ERROR : INVALID OPTION CHOSEN" << endl;
-				break;
-		}
-
-		cout << "Do you want to continue ? (y / n)" << endl;
-		cin >> flag;
-	}
-
-	return(0);
+int main(){
+    cout<< "\n\t Stack Implementation ";
+    char choice;
+    int ch,item,len;
+    do{
+        cout<< "\n\t 1. Push Element in the stack ";
+        cout<< "\n\t 2. Pop Element from the stack ";
+        cout<< "\n\t 3. Length of the stack ";
+        cout<< "\n\t 4. Elements in the stack ";
+        cout<< "\n\t Enter your choice ";
+        cin>> ch;
+        switch(ch){
+            case 1 : cout<< "\n\t Enter the element to be pushed in stack : ";
+                     cin>> item;
+                     head = push(item);
+                     cout<< "\n\t Items in stack are ";
+                     display();
+                break;
+            
+            case 2: item = pop();
+                    cout<< "\n\t Item deleted from stack : "<<item;
+                    cout<< "\n\t Items in stack are ";
+                    display();
+                break;
+            case 3: len = length();
+                    cout<< "\n\t Length of the stack is "<< len;
+                break;
+            case 4: cout<< "\n\t Items in stack are ";
+                    display();
+                break;
+            default : cout<< "\n\t Wrong Choice";
+        }
+        cout<< "\n\t Do you want to continue ?(y/n) ";
+        cin>> choice;
+    }while(choice == 'y');
 }
